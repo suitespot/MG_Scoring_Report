@@ -1,0 +1,31 @@
+table _Version
+	lineageTag: 0c8b4e73-4511-43c1-a52a-621881457973
+
+	column Version
+		dataType: string
+		lineageTag: 246e6b07-dc2c-4d72-b41d-0fb579324736
+		summarizeBy: none
+		sourceColumn: Version
+
+		annotation SummarizationSetBy = Automatic
+
+	column LastRefresh
+		dataType: string
+		lineageTag: 5d7e64dd-f8bd-4563-89ed-63b808d5c211
+		summarizeBy: none
+		sourceColumn: LastRefresh
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Version = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows({{"Version 20240512.01", DateTimeZone.FixedUtcNow()}}, {"Version", "LastRefresh"}),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"LastRefresh", type datetime}}),
+				    #"Added Prefix" = Table.TransformColumns(#"Changed Type", {{"LastRefresh", each "Last Refreshed on " & Text.From(_, "en-CA"), type text}})
+				in
+				    #"Added Prefix"
+
+	annotation PBI_ResultType = Table
+

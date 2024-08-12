@@ -1,0 +1,584 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "7386c178b22d7d31fb00",
+  "position": {
+    "x": 31.565967940813813,
+    "y": 0,
+    "z": 0,
+    "width": 1248.4340320591862,
+    "height": 626.58446362515417,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "PropertySummaries"
+                    }
+                  },
+                  "Property": "unitCount"
+                }
+              },
+              "queryRef": "PropertySummaries.unitCount",
+              "nativeQueryRef": "unitCount"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "PropertySummaries"
+                    }
+                  },
+                  "Property": "name"
+                }
+              },
+              "queryRef": "PropertySummaries.name",
+              "nativeQueryRef": "Property Name",
+              "displayName": "Property Name"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ExternalTurnoverAnalytics"
+                    }
+                  },
+                  "Property": "# of Units Made Ready"
+                }
+              },
+              "queryRef": "ExternalTurnoverAnalytics.# of Units Made Ready",
+              "nativeQueryRef": "# of Units Made Ready"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "ExternalTurnoverAnalytics"
+                        }
+                      },
+                      "Property": "timeToCompleteAfterMoveoutBusinessDays"
+                    }
+                  },
+                  "Function": 1
+                }
+              },
+              "queryRef": "Sum(ExternalTurnoverAnalytics.timeToCompleteAfterMoveoutBusinessDays)",
+              "nativeQueryRef": "Avg # of Days Make Ready Completion",
+              "displayName": "Avg # of Days Make Ready Completion"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ExternalWorkOrderAnalytics"
+                    }
+                  },
+                  "Property": "Work Orders Completed"
+                }
+              },
+              "queryRef": "ExternalWorkOrderAnalytics.Work Orders Completed",
+              "nativeQueryRef": "# of Service Requests Completed",
+              "displayName": "# of Service Requests Completed"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "ExternalWorkOrderAnalytics"
+                        }
+                      },
+                      "Property": "timeToCompleteBusinessDays"
+                    }
+                  },
+                  "Function": 1
+                }
+              },
+              "queryRef": "Sum(ExternalWorkOrderAnalytics.timeToCompleteBusinessDays)",
+              "nativeQueryRef": "Avg # of Days Service Request Completion",
+              "displayName": "Avg # of Days Service Request Completion"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_MSR"
+                    }
+                  },
+                  "Property": "# of Renovations"
+                }
+              },
+              "queryRef": "_MSR.# of Renovations",
+              "nativeQueryRef": "# of Monthly Renovations",
+              "displayName": "# of Monthly Renovations"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_MSR"
+                    }
+                  },
+                  "Property": "AVG_Days_Goals"
+                }
+              },
+              "queryRef": "_MSR.AVG_Days_Goals",
+              "nativeQueryRef": "AVG Days Goals",
+              "displayName": "AVG Days Goals"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Table"
+                    }
+                  },
+                  "Property": "Actual Avg Turnover Days"
+                }
+              },
+              "queryRef": "Table.Actual Avg Turnover Days",
+              "nativeQueryRef": "Actual Avg Turnover Days"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_MSR"
+                    }
+                  },
+                  "Property": "Over/Under Make Ready Goal_"
+                }
+              },
+              "queryRef": "_MSR.Over/Under Make Ready Goal_",
+              "nativeQueryRef": "Over/Under Make Ready Goal_"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_MSR"
+                    }
+                  },
+                  "Property": "Average Make Ready %"
+                }
+              },
+              "queryRef": "_MSR.XXX Calc",
+              "nativeQueryRef": "Average Make Ready %"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "ExternalTurnoverAnalytics"
+                        }
+                      },
+                      "Property": "Make Ready Ranking"
+                    }
+                  },
+                  "Function": 1
+                }
+              },
+              "queryRef": "Sum(ExternalTurnoverAnalytics.Make Ready Ranking)",
+              "nativeQueryRef": "Average of Make Ready Ranking",
+              "displayName": "Make Ready Ranking"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "ExternalWorkOrderAnalytics"
+                        }
+                      },
+                      "Property": "Service Request Ranking"
+                    }
+                  },
+                  "Function": 4
+                }
+              },
+              "queryRef": "Sum(ExternalWorkOrderAnalytics.Service Request Ranking)",
+              "nativeQueryRef": "Service Request Ranking",
+              "displayName": "Service Request Ranking"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "ExternalTurnoverAnalytics"
+                        }
+                      },
+                      "Property": "Average Make Ready % Rankings"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(ExternalTurnoverAnalytics.Average Make Ready % Rankings)",
+              "nativeQueryRef": "Sum of Average Make Ready % Rankings"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "ExternalTurnoverAnalytics"
+                        }
+                      },
+                      "Property": "TotalRankingPos"
+                    }
+                  },
+                  "Function": 3
+                }
+              },
+              "queryRef": "Sum(ExternalTurnoverAnalytics.TotalRankingPos)",
+              "nativeQueryRef": "Min of TotalRankingPos"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "PropertySummaries"
+                  }
+                },
+                "Property": "name"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "47.27828662315582D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "ExternalTurnoverAnalytics.# of Units Made Ready"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "84.58913035634839D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(ExternalTurnoverAnalytics.timeToCompleteAfterMoveoutBusinessDays)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "77.82053871142227D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "ExternalWorkOrderAnalytics.Work Orders Completed"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "81.11697944369922D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(ExternalWorkOrderAnalytics.timeToCompleteBusinessDays)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "65.17948850891838D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_MSR.# of Renovations"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "87.00003885337796D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Table.Actual Avg Turnover Days"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "73.66671839023024D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_MSR.Over/Under Make Ready Goal_"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "50.09084958764237D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_MSR.AVG_Days_Goals"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "69.08543194228116D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(ExternalWorkOrderAnalytics.Service Request Ranking)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "64.495691900205D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(ExternalTurnoverAnalytics.Make Ready Ranking)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "78.02395678996137D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_MSR.XXX Calc"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "93.17015726724262D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(ExternalTurnoverAnalytics.Average Make Ready % Rankings)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "65.57145430569868D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(ExternalTurnoverAnalytics.TotalRankingPos)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "100D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 4,
+                      "Percent": 0.6
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "Filterf29659bd25b5c4df1943",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "PropertySummaries"
+              }
+            },
+            "Property": "unitCount"
+          }
+        },
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "p",
+              "Entity": "PropertySummaries",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Not": {
+                  "Expression": {
+                    "In": {
+                      "Expressions": [
+                        {
+                          "Column": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Source": "p"
+                              }
+                            },
+                            "Property": "unitCount"
+                          }
+                        }
+                      ],
+                      "Values": [
+                        [
+                          {
+                            "Literal": {
+                              "Value": "null"
+                            }
+                          }
+                        ],
+                        [
+                          {
+                            "Literal": {
+                              "Value": "0L"
+                            }
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "objects": {
+          "general": [
+            {
+              "properties": {
+                "isInvertedSelectionMode": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

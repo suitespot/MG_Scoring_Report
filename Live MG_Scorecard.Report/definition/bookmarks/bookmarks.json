@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmarksMetadata/1.0.0/schema.json",
+  "items": [
+    {
+      "name": "Bookmarkd4327078889ab684e2e6"
+    },
+    {
+      "name": "Bookmark9a7311cc07d4d4ea3930"
+    },
+    {
+      "name": "Bookmark388991b140b6e5292256",
+      "displayName": "Capital Plans",
+      "children": [
+        "Bookmark41bf9ff526c4c2db00a4",
+        "Bookmark4e8126c35e1b9181cd5a",
+        "Bookmarkba58b6277cbe4ce933a7"
+      ]
+    },
+    {
+      "name": "Bookmark6b2fa930adb692474310",
+      "displayName": "X-Axis",
+      "children": [
+        "Bookmark24e3575253665da07434",
+        "Bookmark6f4bc538f3515a09f1de",
+        "Bookmarkda4ccb981cc3239cac37"
+      ]
+    }
+  ]
+}

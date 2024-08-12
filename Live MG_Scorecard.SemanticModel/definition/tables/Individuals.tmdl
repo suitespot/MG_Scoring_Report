@@ -1,0 +1,42 @@
+table Individuals
+	lineageTag: ba1081e0-fc6e-4b16-a132-43228c5e6a43
+
+	column _id
+		dataType: string
+		lineageTag: 95c83f60-cf1f-43c0-ae70-5c3c10d90ec7
+		summarizeBy: none
+		sourceColumn: _id
+
+		annotation SummarizationSetBy = Automatic
+
+	column fullname
+		dataType: string
+		lineageTag: 0aeadab5-2307-4d96-b02f-6f940fa68cc9
+		summarizeBy: none
+		sourceColumn: fullname
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		dataType: string
+		lineageTag: ae1ac244-05f9-45c2-a201-d29023789c97
+		summarizeBy: none
+		sourceColumn: email
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Individuals = m
+		mode: import
+		source =
+				let
+				    columns = {"_id", "fullname", "email"},
+				    Source = Json.Document(Web.Contents(URL, [
+				        RelativePath = "/api/individuals/with-fullname",
+				        Headers = [Authorization = "Bearer " & AuthToken]])),
+				    ToTable = Table.FromRecords(Source, columns, MissingField.UseNull),
+				    Result = ToTable
+				in
+				    Result
+
+	annotation PBI_ResultType = Table
+

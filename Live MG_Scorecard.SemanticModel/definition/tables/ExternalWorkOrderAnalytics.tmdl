@@ -1,0 +1,627 @@
+table ExternalWorkOrderAnalytics
+	lineageTag: a5ffcc5e-71bf-4274-bc5a-cc16b733504d
+
+	measure avgTimeToCompleteBusinessDays = AVERAGE(ExternalWorkOrderAnalytics[timeToCompleteBusinessDays])
+		formatString: 0
+		lineageTag: ada42b73-2d6c-40db-bf7c-ca6fd67545de
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure Resolved = ```
+			
+			VAR ResolvedCount = 
+			    CALCULATE(
+			        COUNT(ExternalWorkOrderAnalytics[state]),
+			        FILTER(
+			            ExternalWorkOrderAnalytics,
+			            ExternalWorkOrderAnalytics[state] = "executed" || ExternalWorkOrderAnalytics[state] = "closed"
+			        )
+			    )
+			RETURN
+			IF(ISBLANK(ResolvedCount), 0, ResolvedCount)
+			```
+		formatString: #,0
+		lineageTag: b62d0903-fcee-466d-99ac-1a206637f508
+
+	measure 'Hours Logged' = 0 + SUM(ExternalWorkOrderAnalytics[timeLoggedMinutes]) / 60
+		lineageTag: 50bb60de-f65a-4972-9887-993c6901d10f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Time to First Assigned' = AVERAGE(ExternalWorkOrderAnalytics[timeToFirstAssigned])
+		lineageTag: 701a6c42-c84b-4e91-9ad8-e87dd021a9aa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Overdue = 0 + CALCULATE(COUNT(ExternalWorkOrderAnalytics[overdueBusinessDays]),FILTER(ExternalWorkOrderAnalytics,ExternalWorkOrderAnalytics[overdueBusinessDays] <> 0))
+		formatString: #,0
+		lineageTag: d910beae-ddcb-4f97-bab2-209b6008f30c
+
+	measure Callbacks = CALCULATE(COUNTROWS(ExternalWorkOrderAnalytics), FILTER(ExternalWorkOrderAnalytics, ExternalWorkOrderAnalytics[isCallBack] = True))
+		formatString: 0
+		lineageTag: ae3df379-bd20-4a13-bbd2-ea6c5e82b47a
+
+	measure 'Work Orders Completed' = CALCULATE([Resolved],FILTER(ExternalWorkOrderAnalytics,ExternalWorkOrderAnalytics[workflowType]="workflow:work-order"))
+		formatString: 0
+		lineageTag: 0bce78c8-52a1-4e5c-a174-8c66ed7b880d
+
+	measure 'Work Orders' = DISTINCTCOUNT(ExternalWorkOrderAnalytics[_id])
+		formatString: #,0
+		lineageTag: 3d618a58-e36d-4d35-8cf8-02e91dcb621b
+
+	measure 'Work Logged in Hours (SUM)' = SUM(ExternalWorkOrderAnalytics[timeLoggedMinutes])/60
+		lineageTag: 3a2ff031-82b6-43e7-b223-cb1c2b211a30
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg WO Per Unit' = ExternalWorkOrderAnalytics[Work Orders] / MIN(PropertySummaries[unitCount])
+		formatString: 0.00
+		lineageTag: 7d8df760-3942-4dce-8e8c-2ef9700a80ef
+
+	measure 'Job Number Count_WO' = DISTINCTCOUNT(ExternalWorkOrderAnalytics[jobNumber])
+		formatString: #,0
+		lineageTag: 4f7fdab8-92a6-4b2e-9c37-7939c13717a8
+
+	measure Overdue? = IF(SUM(ExternalWorkOrderAnalytics[overdueBusinessDays])>0,"Overdue?","Not Overdue")
+		lineageTag: f7eb13be-7e47-4ee3-986f-7992aa14379d
+
+	column _id
+		dataType: string
+		lineageTag: cc05e4ce-0324-4a1c-8a14-de1d4c7c884c
+		summarizeBy: none
+		sourceColumn: _id
+
+		annotation SummarizationSetBy = Automatic
+
+	column accessInfo
+		dataType: string
+		lineageTag: 95ee73fa-db34-4ba8-8672-5c71730c15c9
+		summarizeBy: none
+		sourceColumn: accessInfo
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: fca64187-6ef4-44b7-89bc-49948411c942
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column completedByEmail
+		dataType: string
+		lineageTag: 158c01b0-a818-4af0-a57e-90fb2499b7ad
+		summarizeBy: none
+		sourceColumn: completedByEmail
+
+		annotation SummarizationSetBy = Automatic
+
+	column completedById
+		dataType: string
+		lineageTag: fac112c0-a93c-4fe4-a68c-cbe540020466
+		summarizeBy: none
+		sourceColumn: completedById
+
+		annotation SummarizationSetBy = Automatic
+
+	column completedByUser
+		dataType: string
+		lineageTag: 35f8ae24-a9ce-45b2-833f-a00dc10a52e8
+		summarizeBy: none
+		sourceColumn: completedByUser
+
+		annotation SummarizationSetBy = Automatic
+
+	column completedDateLocal
+		dataType: string
+		lineageTag: 3109e422-48ee-4d59-a847-ebbdc9dc5473
+		summarizeBy: none
+		sourceColumn: completedDateLocal
+
+		annotation SummarizationSetBy = Automatic
+
+	column completedDateUTC
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: fc51011b-9823-45a4-a89a-b9b862b8865a
+		summarizeBy: none
+		sourceColumn: completedDateUTC
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column createdDateLocal
+		dataType: string
+		lineageTag: 2a53714b-4e3d-4852-977c-c7dedd2bcf5c
+		summarizeBy: none
+		sourceColumn: createdDateLocal
+
+		annotation SummarizationSetBy = Automatic
+
+	column createdDateUTC
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 74b53d35-e490-4a3e-ab02-53b025221c6f
+		summarizeBy: none
+		sourceColumn: createdDateUTC
+
+		annotation SummarizationSetBy = Automatic
+
+	column dueDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f99415dc-f79f-4c60-8844-c37126a84098
+		summarizeBy: none
+		sourceColumn: dueDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column fromScheduledTask
+		dataType: string
+		lineageTag: 9513c0fa-14f3-422a-b3b2-a52a15ebe6eb
+		summarizeBy: none
+		sourceColumn: fromScheduledTask
+
+		annotation SummarizationSetBy = Automatic
+
+	column householdId
+		dataType: string
+		lineageTag: 55d32365-0945-46d4-9057-f2ae34218576
+		summarizeBy: none
+		sourceColumn: householdId
+
+		annotation SummarizationSetBy = Automatic
+
+	column isCallBack
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: e0c67ead-db3b-41e7-9159-b4fe4d450015
+		summarizeBy: none
+		sourceColumn: isCallBack
+
+		annotation SummarizationSetBy = Automatic
+
+	column isOnHold
+		dataType: string
+		lineageTag: c4cd0ff2-a4cf-427e-af06-4251f527b06b
+		summarizeBy: none
+		sourceColumn: isOnHold
+
+		annotation SummarizationSetBy = Automatic
+
+	column jobNumber
+		dataType: string
+		lineageTag: b48cc274-31d7-44df-ab53-f1b7c81691e6
+		summarizeBy: none
+		sourceColumn: jobNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column laborStandardMins
+		dataType: string
+		lineageTag: 2c3bb5b9-f46f-47ed-905a-2ff3bb8a1c4e
+		summarizeBy: none
+		sourceColumn: laborStandardMins
+
+		annotation SummarizationSetBy = Automatic
+
+	column lastUpdatedById
+		dataType: string
+		lineageTag: 29f3b758-141c-44ed-a804-5760a1ccb96a
+		summarizeBy: none
+		sourceColumn: lastUpdatedById
+
+		annotation SummarizationSetBy = Automatic
+
+	column lastUpdatedDate
+		dataType: string
+		lineageTag: f0affa17-c702-41c6-9835-f464434f5c63
+		summarizeBy: none
+		sourceColumn: lastUpdatedDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column longDescription
+		dataType: string
+		lineageTag: 13e9e54b-013b-4bfb-8c78-cabeb8987e37
+		summarizeBy: none
+		sourceColumn: longDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column onHoldDate
+		dataType: string
+		lineageTag: 14bdc94b-7e8a-4511-8de1-52c0ff544053
+		summarizeBy: none
+		sourceColumn: onHoldDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column onHoldNote
+		dataType: string
+		lineageTag: 11f9f883-7abb-415f-9a15-2b1102f4a7e4
+		summarizeBy: none
+		sourceColumn: onHoldNote
+
+		annotation SummarizationSetBy = Automatic
+
+	column onHoldReason
+		dataType: string
+		lineageTag: f9691586-c29d-4416-8361-2c681b171810
+		summarizeBy: none
+		sourceColumn: onHoldReason
+
+		annotation SummarizationSetBy = Automatic
+
+	column overdueBusinessDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 9f4ef190-6c0b-41f6-9ee0-4121ec83229b
+		summarizeBy: sum
+		sourceColumn: overdueBusinessDays
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column overdueDays
+		dataType: string
+		lineageTag: 1a2b43d0-af67-483d-bd48-b9eb48441837
+		summarizeBy: none
+		sourceColumn: overdueDays
+
+		annotation SummarizationSetBy = Automatic
+
+	column poSum
+		dataType: string
+		lineageTag: 307fe93e-ea6d-408e-bf57-a341f9b3273d
+		summarizeBy: none
+		sourceColumn: poSum
+
+		annotation SummarizationSetBy = Automatic
+
+	column priority
+		dataType: string
+		lineageTag: 9d590331-e9b1-40c5-8407-736bde9eb3f8
+		summarizeBy: none
+		sourceColumn: priority
+
+		annotation SummarizationSetBy = Automatic
+
+	column scheduledTaskInstanceId
+		dataType: string
+		lineageTag: 695c0f18-5aee-4023-94d7-5bc4e3334f1d
+		summarizeBy: none
+		sourceColumn: scheduledTaskInstanceId
+
+		annotation SummarizationSetBy = Automatic
+
+	column serviceIssue
+		dataType: string
+		lineageTag: dca9aeca-6e69-4dcf-bfee-0bea36bdfd91
+		summarizeBy: none
+		sourceColumn: serviceIssue
+
+		annotation SummarizationSetBy = Automatic
+
+	column shortDescription
+		dataType: string
+		lineageTag: ce72e9c4-cf8d-4c7d-b95c-a80fcf2c1dcf
+		summarizeBy: none
+		sourceColumn: shortDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: 7930c1f0-d218-4e3b-9432-c686d1a3c17f
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column subcategory
+		dataType: string
+		lineageTag: 05d191be-9c05-4bbe-b95b-14d4908de0e8
+		summarizeBy: none
+		sourceColumn: subcategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column timeFromAssignToCompleteBusinessDays
+		dataType: string
+		lineageTag: 68c5c27d-a5cf-4ac6-bc81-9b0711599401
+		summarizeBy: none
+		sourceColumn: timeFromAssignToCompleteBusinessDays
+
+		annotation SummarizationSetBy = Automatic
+
+	column timeFromAssignToCompleteDays
+		dataType: string
+		lineageTag: 27fbd7f0-8afd-4fee-955a-2ce5d5a00c27
+		summarizeBy: none
+		sourceColumn: timeFromAssignToCompleteDays
+
+		annotation SummarizationSetBy = Automatic
+
+	column timeLoggedMinutes
+		dataType: double
+		lineageTag: 6a6ef77a-1fe2-4ad2-ba4f-55ca6c99ac7f
+		summarizeBy: sum
+		sourceColumn: timeLoggedMinutes
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column timeToApproveBusinessDays
+		dataType: string
+		lineageTag: 587fb72b-ba69-42eb-898a-d02a3194c4f4
+		summarizeBy: none
+		sourceColumn: timeToApproveBusinessDays
+
+		annotation SummarizationSetBy = Automatic
+
+	column timeToApproveDays
+		dataType: string
+		lineageTag: 4eb49e9c-ba8f-42eb-95dc-891257bd6e6e
+		summarizeBy: none
+		sourceColumn: timeToApproveDays
+
+		annotation SummarizationSetBy = Automatic
+
+	column timeToCompleteBusinessDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 3de95acb-89e9-4a7a-9b0a-f822b90ffb3e
+		summarizeBy: sum
+		sourceColumn: timeToCompleteBusinessDays
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column timeToCompleteDays
+		dataType: double
+		formatString: 0
+		lineageTag: af2ae534-6a54-4ace-9564-1091bcbc3a24
+		summarizeBy: sum
+		sourceColumn: timeToCompleteDays
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column timeToFirstAssigned
+		dataType: string
+		lineageTag: 51f24b6a-82ae-436f-a9e0-2e00030c8f00
+		summarizeBy: none
+		sourceColumn: timeToFirstAssigned
+
+		annotation SummarizationSetBy = Automatic
+
+	column timeToFirstAssignedBusinessDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 03cddb66-dd28-44c1-a2da-be4807fcf1d8
+		summarizeBy: sum
+		sourceColumn: timeToFirstAssignedBusinessDays
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column workAssignedTo
+		dataType: string
+		lineageTag: 39395b1d-5ac8-410e-a65e-07181ab7c8a2
+		summarizeBy: none
+		sourceColumn: workAssignedTo
+
+		annotation SummarizationSetBy = Automatic
+
+	column workOrderId
+		dataType: string
+		lineageTag: d14e170c-d532-43b8-a6dd-1cc69229d8c0
+		summarizeBy: none
+		sourceColumn: workOrderId
+
+		annotation SummarizationSetBy = Automatic
+
+	column workflowArchetype
+		dataType: string
+		lineageTag: a0da475f-b5d3-45c7-8cbb-c6ba71626741
+		summarizeBy: none
+		sourceColumn: workflowArchetype
+
+		annotation SummarizationSetBy = Automatic
+
+	column workflowId
+		dataType: string
+		lineageTag: 07c8d9fd-d338-4f34-bbdf-767fe8a72fc6
+		summarizeBy: none
+		sourceColumn: workflowId
+
+		annotation SummarizationSetBy = Automatic
+
+	column workflowType
+		dataType: string
+		lineageTag: 000e2956-f2f1-4ec6-8ad0-1a549efc1e46
+		summarizeBy: none
+		sourceColumn: workflowType
+
+		annotation SummarizationSetBy = Automatic
+
+	column propertyId
+		dataType: string
+		lineageTag: 0c33370b-960b-44b0-a805-b45bc18dc7a3
+		summarizeBy: none
+		sourceColumn: propertyId
+
+		annotation SummarizationSetBy = Automatic
+
+	column unitId
+		dataType: string
+		lineageTag: 693902c7-ee88-4c66-8045-d8b8fb28fae6
+		summarizeBy: none
+		sourceColumn: unitId
+
+		annotation SummarizationSetBy = Automatic
+
+	column workAssignedToFullName
+		dataType: string
+		lineageTag: 5c78b921-8134-4563-b625-4e3b74901c30
+		summarizeBy: none
+		sourceColumn: workAssignedToFullName
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: b6b1a46a-8bd3-4a8d-82b1-3a647d483ffe
+		summarizeBy: none
+		sourceColumn: Month Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Week
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 35a6c425-a634-4ca1-850d-4ceffae72abd
+		summarizeBy: none
+		sourceColumn: Week
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Month
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9008d1c0-c050-49bd-b7d5-ff2eed5d839e
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: af80f72c-373d-4d24-a2b2-06caf62dc858
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'isCallBack - Copy'
+		dataType: string
+		lineageTag: 7b425f11-fb2f-43ad-9545-4cb37a93441c
+		summarizeBy: none
+		sourceColumn: isCallBack - Copy
+
+		annotation SummarizationSetBy = Automatic
+
+	column OverdueColumn = ```
+			
+			    IF([Overdue]=1,"Overdue?","Not Overdue")
+			
+			```
+		dataType: string
+		lineageTag: 9f25d792-abf3-4626-83f2-388089e152a1
+		summarizeBy: none
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Over/Under Make Ready Goal' =
+			
+			ROUND(
+			    [Actual Avg Turnover Days] - [AverageDaysGoal],
+			    2
+			)
+		lineageTag: a148452f-3bb1-4009-a132-db9dc89e0863
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Avg # of Days Service Request Completions' =
+			
+			DIVIDE(
+			    [TotalDaysStandardTurns] + [TotalDaysRennovations],
+			    [Turn Counts],
+			    0
+			)
+		dataType: double
+		lineageTag: 499ff333-8510-4877-9fc9-b28c9698e95e
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Service Request Ranking' = RANKX(ALL('ExternalWorkOrderAnalytics'), [Avg # of Days Service Request Completions], , DESC, DENSE)
+		dataType: int64
+		formatString: 0
+		lineageTag: 18749353-394b-426a-a2bd-d4dd7b2ff340
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	column turnType
+		dataType: string
+		lineageTag: 7b89cdf3-8d9d-46ed-9613-5e2472110db8
+		summarizeBy: none
+		sourceColumn: turnType
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'workflowType Hierarchy'
+		lineageTag: 7d1a806f-cc93-465d-ad9d-ac98afd496c1
+
+		level workflowType
+			lineageTag: 8420128f-88c1-44ec-b420-849d53edf222
+			column: workflowType
+
+	partition ExternalWorkOrderAnalytics = m
+		mode: import
+		source =
+				let
+				    columns = {"_id", "accessInfo", "category", "completedByEmail", "completedById", "completedByUser", "completedDateLocal", "completedDateUTC", "createdDateLocal", "createdDateUTC", "dueDate", "fromScheduledTask", "householdId", "isCallBack", "isOnHold", "jobNumber", "laborStandardMins", "lastUpdatedById", "lastUpdatedDate", "longDescription", "onHoldDate", "onHoldNote", "onHoldReason", "overdueBusinessDays", "overdueDays", "poSum", "priority", "scheduledTaskInstanceId", "serviceIssue", "shortDescription", "state", "subcategory", "target", "timeFromAssignToCompleteBusinessDays", "timeFromAssignToCompleteDays", "timeLoggedMinutes", "timeToApproveBusinessDays", "timeToApproveDays", "timeToCompleteBusinessDays", "timeToCompleteDays", "timeToFirstAssigned", "timeToFirstAssignedBusinessDays", "workAssignedTo", "workOrderId", "workflowArchetype", "workflowId", "workflowType", "turnType"},
+				    Source = Json.Document(Web.Contents(URL, [
+				        RelativePath = "/api/external/analytics/workorder-analytics",
+				        Headers = [Authorization = "Bearer " & AuthToken]])),
+				    ToTable = Table.FromRecords(Source, columns, MissingField.UseNull),
+				    ExpandPropertyId = Table.ExpandRecordColumn(ToTable, "target", { "propertyId", "unitId" }, { "propertyId", "unitId" }),
+				    WorkAssignedToJoin = Table.NestedJoin(ExpandPropertyId, "workAssignedTo", Individuals, "_id", "workAssignedToIndividual"),
+				    WorkAssignedToJoinExpanded = Table.ExpandTableColumn(WorkAssignedToJoin, "workAssignedToIndividual", {"fullname"}, {"workAssignedToFullName"}),
+				    FixIsCallback = Table.TransformColumnTypes(WorkAssignedToJoinExpanded, { "isCallBack", type logical }),
+				    Result = FixIsCallback,
+				    #"Changed Type" = Table.TransformColumnTypes(Result,{{"completedDateUTC", type datetime}, {"createdDateUTC", type datetime}, {"dueDate", type datetime}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Changed Type",null,"None",Replacer.ReplaceValue,{"priority"}),
+				    #"Inserted Month Name" = Table.AddColumn(#"Replaced Value", "Month Name", each Date.MonthName([completedDateUTC]), type text),
+				    #"Inserted Start of Week" = Table.AddColumn(#"Inserted Month Name", "Week", each Date.StartOfWeek([completedDateUTC]), type datetime),
+				    #"Inserted Start of Month" = Table.AddColumn(#"Inserted Start of Week", "Start of Month", each Date.StartOfMonth([completedDateUTC]), type datetime),
+				    #"Renamed Columns" = Table.RenameColumns(#"Inserted Start of Month",{{"Start of Month", "Month"}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns",{{"Week", type date}, {"Month", type date}}),
+				    #"Inserted Year" = Table.AddColumn(#"Changed Type1", "Year", each Date.Year([completedDateUTC]), Int64.Type),
+				    #"Duplicated Column" = Table.DuplicateColumn(#"Inserted Year", "isCallBack", "isCallBack - Copy"),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Duplicated Column",{{"isCallBack - Copy", type text}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Changed Type2", each true),
+				    #"Changed Type3" = Table.TransformColumnTypes(#"Filtered Rows",{{"timeToCompleteDays", Currency.Type}}),
+				    #"Replaced TurnType" = Table.ReplaceValue(#"Changed Type3", each [turnType], each if [turnType] = "2 bed Classic" or [turnType] = "LivCor Standard to Full" or [turnType] = "${unitAttributes.nextTurnType}" then "Renovation" else [turnType], Replacer.ReplaceValue, {"turnType"})
+				in
+				    #"Replaced TurnType"
+
+	annotation PBI_ResultType = Exception
+

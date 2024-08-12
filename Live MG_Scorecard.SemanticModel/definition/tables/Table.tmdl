@@ -1,0 +1,58 @@
+table Table
+	lineageTag: 00710007-4059-4294-8ed3-1111adf20919
+
+	measure TotalTurns =
+			CALCULATE(
+			DISTINCTCOUNTNOBLANK(ExternalTurnoverAnalytics[workflowId]), ExternalTurnoverAnalytics[state]=3)
+		formatString: 0
+		lineageTag: ba952376-3ebd-4603-bdc4-f391284a8be3
+
+	measure 'TO Completed' = ```
+			CALCULATE(
+			    DISTINCTCOUNT(ExternalTurnoverAnalytics[workflowId]),ExternalTurnoverAnalytics[state]=3)
+			
+			```
+		formatString: 0
+		lineageTag: 02772f8a-da66-404f-94ae-44b568c8d94a
+
+	measure 'Actual Avg Turnover Days' = ```
+			
+			DIVIDE(
+			    ([StandardTurnCount] * [_Actual Avg Days for Standard Turns]) + 
+			    ([# of Renovations] * [_Actual Avg Days for Renovations]),
+			    [TotalTurns]
+			)
+			```
+		lineageTag: 94070e52-c566-4e23-8585-baaa4980cc78
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure ServiceRequestCompleted =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(ExternalWorkOrderAnalytics[workflowId]),
+			    FORMAT(ExternalTurnoverAnalytics[state], "0") IN {"closed", "executed"},
+			    ExternalWorkOrderAnalytics[workflowType]="workflow:work-order"
+			)
+		formatString: 0
+		lineageTag: 0fe39f8d-0db4-4f36-b71d-12f0afd7e68a
+
+	column Column1
+		dataType: string
+		lineageTag: fba75d05-88e3-4aa8-b948-fbd29aecf9d7
+		summarizeBy: none
+		sourceColumn: Column1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Table = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

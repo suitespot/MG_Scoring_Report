@@ -1,0 +1,34 @@
+table PropertyParent
+	lineageTag: c0ae1aee-6682-438d-a08d-e5199e33900e
+
+	column _id
+		dataType: string
+		lineageTag: d5b0bc38-c28c-4dd5-9528-ad18be18758d
+		summarizeBy: none
+		sourceColumn: _id
+
+		annotation SummarizationSetBy = Automatic
+
+	column parentId
+		dataType: string
+		lineageTag: a3724456-e418-45fb-8850-731c89729732
+		summarizeBy: none
+		sourceColumn: parentId
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PropertyParent = m
+		mode: import
+		source =
+				let
+				    columns = {"_id", "parentId"},
+				    Source = Json.Document(Web.Contents(URL, [
+				        RelativePath = "/api/external/properties/summaries",
+				        Headers = [Authorization = "Bearer " & AuthToken]])),
+				    ToTable = Table.FromRecords(Source, columns, MissingField.UseNull),
+				    Result = ToTable
+				in
+				    Result
+
+	annotation PBI_ResultType = Table
+

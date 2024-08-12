@@ -1,0 +1,648 @@
+table ExternalTurnoverAnalytics
+	lineageTag: df5bbc01-aadd-424c-9dcd-1b7dcdb08444
+
+	measure 'Count of failsExpectedRent % difference from 1' =
+			
+			VAR __BASELINE_VALUE =
+				CALCULATE(
+					COUNTA('ExternalTurnoverAnalytics'[_id]),
+					'ExternalTurnoverAnalytics'[failsExpectedRent]=1
+				)
+			VAR __MEASURE_VALUE = COUNTA('ExternalTurnoverAnalytics'[_id])
+			RETURN
+				IF(
+					NOT ISBLANK(__MEASURE_VALUE),
+					DIVIDE(0 + __BASELINE_VALUE, __MEASURE_VALUE)
+				)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: b4dbde2c-3b3f-4091-ba82-2326bb0d2c23
+
+		extendedProperty MeasureTemplate =
+				{
+				  "daxTemplateName": "PercentageDifferenceFrom",
+				  "version": 0
+				}
+
+		changedProperty = FormatString
+
+	measure 'Turn Count' = IF(ISBLANK(COUNT(ExternalTurnoverAnalytics[_id])),0,COUNT(ExternalTurnoverAnalytics[_id]))
+		formatString: #,0
+		lineageTag: b7c6b8a1-41dc-4739-b150-10507fca1abb
+
+	measure 'Completed Turns' = CALCULATE(COUNT(ExternalTurnoverAnalytics[_id]),ExternalTurnoverAnalytics[state]=3)
+		formatString: #,0
+		lineageTag: 3c4be7cb-9bd0-4a90-8e1c-d6b13550d90b
+
+	measure 'Avg Time to Complete' = CALCULATE(AVERAGE(ExternalTurnoverAnalytics[timeToCompleteFromMoveoutDays]))
+		lineageTag: 90f83765-b2c1-435c-91ce-b500ea34ed1a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Notice Days (Neg)' = -AVERAGE(ExternalTurnoverAnalytics[noticeDays])
+		lineageTag: 431d3a58-cd78-4509-b2f2-c1a032a41669
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Completed Turns Per Unit by Property' = [Completed Turns] / MIN(PropertySummaries[unitCount])
+		formatString: 0.00
+		lineageTag: 625acd34-fecc-4e93-89b2-7e372598e6b3
+
+	measure 'Job Number Count_TO' = DISTINCTCOUNT(ExternalTurnoverAnalytics[jobNumber])
+		formatString: #,0
+		lineageTag: c152d365-8816-4487-bf38-5a847f284cc9
+
+	measure Completiondays =
+			sumx
+			(ExternalTurnoverAnalytics,
+			   DATEDIFF(
+			    ExternalTurnoverAnalytics[moveoutDateUTC],
+			    ExternalTurnoverAnalytics[completedDateUTC],DAY)
+			)
+		formatString: 0
+		lineageTag: 971465cd-06d8-419e-98d8-e78b0bbd2231
+
+	measure '# of Units Made Ready' = ```
+			
+			CALCULATE(DISTINCTCOUNTNOBLANK(ExternalTurnoverAnalytics[workflowId]),ExternalTurnoverAnalytics[state]=3)
+			
+			```
+		formatString: 0
+		lineageTag: 02e81143-7f25-4573-83ff-cbbe026fcd2e
+
+	measure '_Average Make Ready %' =
+			
+			AVERAGEX(
+			    'ExternalTurnoverAnalytics',
+			    'ExternalTurnoverAnalytics'[Average Makes Ready %]
+			)
+		lineageTag: 4bcb5f5f-1772-4876-9f75-4c2359d67d1b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column _id
+		dataType: string
+		lineageTag: 2774022d-6670-473e-a0d5-ee511f7bd98b
+		summarizeBy: none
+		sourceColumn: _id
+
+		annotation SummarizationSetBy = Automatic
+
+	column actualPaybackMonths
+		dataType: double
+		lineageTag: 77d63378-dfef-4bf1-b571-1aa62ee384c7
+		summarizeBy: sum
+		sourceColumn: actualPaybackMonths
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column actualRent
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 4caacab6-c2d6-4f5a-a09b-029bb73284ba
+		summarizeBy: sum
+		sourceColumn: actualRent
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column completedDateUTC
+		dataType: dateTime
+		formatString: mm/dd/yy
+		lineageTag: ff04795a-31f9-4df9-ac6a-7e8285165b96
+		summarizeBy: none
+		sourceColumn: completedDateUTC
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column createdDateUTC
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 89a8e99d-3f26-4af9-9e5b-c79594321071
+		summarizeBy: none
+		sourceColumn: createdDateUTC
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column currentRent
+		dataType: double
+		lineageTag: 2155cf67-0768-4ac7-a4cb-91237db9ced7
+		summarizeBy: sum
+		sourceColumn: currentRent
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column expectedPaybackMonths
+		dataType: double
+		lineageTag: 00289f5f-320c-407f-b2d5-0d4f24f6252f
+		summarizeBy: sum
+		sourceColumn: expectedPaybackMonths
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column expectedRent
+		dataType: double
+		lineageTag: 5f1761ed-ae76-41b7-909a-70db4b653bfd
+		summarizeBy: sum
+		sourceColumn: expectedRent
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column failsExpectedRent
+		dataType: double
+		lineageTag: dc6b668b-ecc5-4328-800d-ecdd2c9d4080
+		summarizeBy: sum
+		sourceColumn: failsExpectedRent
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column jobNumber
+		dataType: string
+		lineageTag: 92dc13be-1573-427c-a734-774a98c34bb4
+		summarizeBy: none
+		sourceColumn: jobNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column lastUpdatedById
+		dataType: string
+		lineageTag: 913ca6be-868a-4233-8cb9-3d8b73fe975e
+		summarizeBy: none
+		sourceColumn: lastUpdatedById
+
+		annotation SummarizationSetBy = Automatic
+
+	column lastUpdatedDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c97e042c-5246-49f4-ab90-38ae5c8fdc96
+		summarizeBy: none
+		sourceColumn: lastUpdatedDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column marketRent
+		dataType: double
+		lineageTag: 588aee2c-a324-4e73-ad43-70e84580b8b4
+		summarizeBy: sum
+		sourceColumn: marketRent
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column meetsExpectedRent
+		dataType: int64
+		formatString: 0
+		lineageTag: 1c73320c-72e3-47a4-a672-21776321a976
+		summarizeBy: sum
+		sourceColumn: meetsExpectedRent
+
+		annotation SummarizationSetBy = Automatic
+
+	column moveoutDateUTC
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 600c49fb-975b-4f9d-bddc-2edf356ab43d
+		summarizeBy: none
+		sourceColumn: moveoutDateUTC
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column noticeDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 4e36d5f1-1213-4a84-bcd2-2666d58dc7d6
+		summarizeBy: sum
+		sourceColumn: noticeDays
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column rentLift
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 32c77596-bcfd-47c5-834d-0b0bce717f46
+		summarizeBy: sum
+		sourceColumn: rentLift
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column spendLiftRatio
+		dataType: double
+		formatString: 0.00
+		lineageTag: 76603cf8-a1ac-4a8f-bf0f-3c58817239d3
+		summarizeBy: sum
+		sourceColumn: spendLiftRatio
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: int64
+		formatString: 0
+		lineageTag: 7500b119-799b-401a-835d-038826d1699b
+		summarizeBy: sum
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column propertyId
+		dataType: string
+		lineageTag: c3b761e5-d56e-40d5-8746-729e697ab16d
+		summarizeBy: none
+		sourceColumn: propertyId
+
+		annotation SummarizationSetBy = Automatic
+
+	column unitId
+		dataType: string
+		lineageTag: 7d61f705-e4fb-4b67-a4e4-55fb0397aa7a
+		summarizeBy: none
+		sourceColumn: unitId
+
+		annotation SummarizationSetBy = Automatic
+
+	column timeToCompleteFromMoveoutDays
+		dataType: double
+		lineageTag: 7d9c36b7-dbcc-4198-8c9e-666d1d66cec8
+		summarizeBy: sum
+		sourceColumn: timeToCompleteFromMoveoutDays
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column totalSpend
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 497b696f-d734-4d96-b3d0-a0ef5dba9386
+		summarizeBy: sum
+		sourceColumn: totalSpend
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column totalSpendWithTax
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 45367796-84c0-4d92-b9a6-32eba96dfcaa
+		summarizeBy: sum
+		sourceColumn: totalSpendWithTax
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = User
+
+	column workflowId
+		dataType: string
+		lineageTag: e334c48d-d285-4a63-8c9c-5431e47fee19
+		summarizeBy: none
+		sourceColumn: workflowId
+
+		annotation SummarizationSetBy = Automatic
+
+	column workflowType
+		dataType: string
+		lineageTag: dc2acbf9-2043-4d59-ac06-092fe92d2059
+		summarizeBy: none
+		sourceColumn: workflowType
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PropertySummaries._id'
+		dataType: string
+		lineageTag: 07e8411f-23a5-4138-be64-614db696d1bb
+		summarizeBy: none
+		sourceColumn: PropertySummaries._id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PropertySummaries.name'
+		dataType: string
+		lineageTag: 04d69623-a5b3-49ca-a50e-683ac047b06b
+		summarizeBy: none
+		sourceColumn: PropertySummaries.name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: b91dd42c-c1c8-4234-9c23-d815046bf4da
+		summarizeBy: none
+		sourceColumn: Month Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Move Out Month'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 7a54b03f-e73f-4ae0-8c83-2d2ffc11dd18
+		summarizeBy: none
+		sourceColumn: Move Out Month
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column daysOnHold
+		dataType: double
+		lineageTag: a423681b-08a0-4518-9ce5-9c4b85283801
+		summarizeBy: sum
+		sourceColumn: daysOnHold
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column daysBetweenMoveOutAndRentReady
+		dataType: double
+		lineageTag: 618ee095-0b54-4427-ac5d-813661563a47
+		summarizeBy: sum
+		sourceColumn: daysBetweenMoveOutAndRentReady
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column rentReadyDateUTC
+		dataType: string
+		lineageTag: dab052cd-3256-41a2-9b38-1ee4a5610b9b
+		summarizeBy: none
+		sourceColumn: rentReadyDateUTC
+
+		annotation SummarizationSetBy = Automatic
+
+	column timeToCompleteAfterMoveoutBusinessDays
+		dataType: double
+		lineageTag: d9434c89-3298-40f0-a679-9504e5d7f3d8
+		summarizeBy: sum
+		sourceColumn: timeToCompleteAfterMoveoutBusinessDays
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column timeToCompleteAfterMoveoutDays
+		dataType: double
+		lineageTag: 14a88d61-e28d-4d72-8773-82fb9b36b7f0
+		summarizeBy: sum
+		sourceColumn: timeToCompleteAfterMoveoutDays
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column timeToCompleteFromMoveoutBusinessDays
+		dataType: double
+		lineageTag: b63752d8-fea8-44b5-8f21-8e0bb7b2bf66
+		summarizeBy: sum
+		sourceColumn: timeToCompleteFromMoveoutBusinessDays
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column totalChangeOrderSpend
+		dataType: decimal
+		formatString: \$#,0.###############;-\$#,0.###############;\$#,0.###############
+		lineageTag: 373b8ddb-7e97-422a-94ac-85dddeb787f9
+		summarizeBy: sum
+		sourceColumn: totalChangeOrderSpend
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-CA"}
+
+	column totalChangeOrderSpendWithTax
+		dataType: decimal
+		formatString: \$#,0.###############;-\$#,0.###############;\$#,0.###############
+		lineageTag: c10a1426-645a-4f23-892f-d4b1df28c73c
+		summarizeBy: sum
+		sourceColumn: totalChangeOrderSpendWithTax
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-CA"}
+
+	column index = RANKX(ALL(ExternalTurnoverAnalytics[propertyId]) ,_MSR[# of UnitsMadeReady])
+		dataType: int64
+		formatString: 0
+		lineageTag: 998b1a3d-af32-48ec-b766-fd3a76b1fc3b
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	column turnType
+		dataType: string
+		lineageTag: a2edbcd0-2592-4977-8511-2098ddd2dc63
+		summarizeBy: none
+		sourceColumn: turnType
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Properties_Merged.Properties_Units.units._id'
+		dataType: string
+		lineageTag: 837e894e-8d4c-4ddd-9381-94ff23308c17
+		summarizeBy: none
+		sourceColumn: Properties_Merged.Properties_Units.units._id
+
+		annotation SummarizationSetBy = Automatic
+
+	column moveinDateUTC
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 4d482f92-6dbb-4b35-abe4-81b2a7564fe6
+		summarizeBy: none
+		sourceColumn: moveinDateUTC
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Average Make Ready % Rankings' =
+			
+			RANKX(
+			    ALL('ExternalTurnoverAnalytics'),
+			    [Average Make Ready % column],
+			    ,
+			    ASC,
+			    DENSE
+			)
+		dataType: int64
+		formatString: 0
+		lineageTag: 5cfb88ed-da04-46a3-914f-00b19e5aea14
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Average Makes Ready %' = ```
+			
+			// It will not work properly unless turns marked correctly
+			VAR TotalWithinExpectedDays = 
+			    [StandardTurnsWithinExpectedDays] + [RenovationsWithinExpectedDays]
+			
+			
+			
+			RETURN 
+			    DIVIDE(
+			        TotalWithinExpectedDays,
+			        [TotalTurns],
+			        0
+			    ) 
+			    // * 100
+			```
+		dataType: double
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 76769377-a3bc-4b97-8bb1-4fa58f903b63
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Actual Avg Days for Standard Turns' = CALCULATE(AVERAGE(ExternalTurnoverAnalytics[timeToCompleteAfterMoveoutBusinessDays]), ExternalTurnoverAnalytics[turnType]="Standard Turn")
+		dataType: double
+		lineageTag: 09f88682-0179-4b2c-b389-249f83221c1f
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Actual Avg Days for Renovations' = CALCULATE(AVERAGE(ExternalTurnoverAnalytics[timeToCompleteAfterMoveoutBusinessDays]), ExternalTurnoverAnalytics[turnType]="Renovation")
+		dataType: double
+		lineageTag: 60f89c80-639c-4f6c-b559-869801218871
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Make Ready Ranking' = RANKX(ALL('ExternalTurnoverAnalytics'), [Over/Under Make Ready Goal_], , DESC, DENSE)
+		dataType: int64
+		formatString: 0
+		lineageTag: 253e18ae-79f0-4b39-87ed-95171c425f0e
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Average Make Ready % column' = ([StandardTurnsWithinExpectedDays]+[RenovationsWithinExpectedDays])/([StandardTurnCount]+[# of Renovations])
+		dataType: double
+		lineageTag: a6e93aac-c37b-48e8-bec6-a4d53beaba34
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total Score' = ```
+			(ExternalTurnoverAnalytics[Make Ready Ranking]/sum(ExternalTurnoverAnalytics[Average Make Ready % Rankings]))+ExternalTurnoverAnalytics[Make Ready Ranking]
+			
+			```
+		dataType: double
+		lineageTag: 8a32f3f0-2482-49c4-8628-db91d4441ce6
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalRankingPos = RANKX(ALL('ExternalTurnoverAnalytics'), [Total Score], , ASC, DENSE)
+		dataType: int64
+		formatString: 0
+		lineageTag: 047e0476-97a6-45c2-9c8c-178a3db99133
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ExternalTurnoverAnalytics = m
+		mode: import
+		source = ```
+				let
+				    columns = {"_id", "actualPaybackMonths", "actualRent", "completedDateUTC",
+				    //  "completedReason",
+				      "createdDateUTC", "currentRent", "daysOnHold", 
+				     "daysBetweenMoveOutAndRentReady", "expectedPaybackMonths", "expectedRent",
+				      "failsExpectedRent", "jobNumber", "lastUpdatedById", "lastUpdatedDate", "marketRent", 
+				      "meetsExpectedRent", "moveoutDateUTC", "noticeDays", "rentLift", "scope", "spendLiftRatio", 
+				      "state", "target", "timeToCompleteDays", "timeToCompleteFromMoveoutDays", "totalSpend", 
+				      "totalSpendWithTax", "workflowId", "workflowType", "moveinDateUTC", "rentReadyDateUTC", 
+				      "customFields", "timeToCompleteAfterMoveoutBusinessDays", "timeToCompleteAfterMoveoutDays",
+				       "timeToCompleteBusinessDays", "timeToCompleteFromMoveoutBusinessDays", "totalChangeOrderSpend",
+				        "totalChangeOrderSpendWithTax", "milestones","turnType" },
+				    Source = Json.Document(Web.Contents(URL, [
+				        RelativePath = "/api/external/analytics/turnover-analytics/pbi",
+				        //              Query = [
+				        //     limit = "10000",
+				        //     start = "0",
+				        //     sort = "{""_id"":1}"
+				        // ],
+				        Headers = [Authorization = "Bearer " & AuthToken]])),
+				    ToTable = Table.FromRecords(Source, columns, MissingField.UseNull),
+				    ExpandPropertyId = Table.ExpandRecordColumn(ToTable, "target", { "propertyId", "unitId" }, { "propertyId", "unitId" }),
+				    #"Merged Queries" = Table.NestedJoin(ExpandPropertyId, {"propertyId"}, PropertySummaries, {"_id"}, "PropertySummaries", JoinKind.LeftOuter),
+				    #"Expanded PropertySummaries" = Table.ExpandTableColumn(#"Merged Queries", "PropertySummaries", {"_id", "name"}, {"PropertySummaries._id", "PropertySummaries.name"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded PropertySummaries",{{"completedDateUTC", type datetime}, {"createdDateUTC", type datetime}}),
+				    #"Inserted Month Name" = Table.AddColumn(#"Changed Type", "Month Name", each Date.MonthName([completedDateUTC]), type text),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Inserted Month Name",{{"moveoutDateUTC", type datetime}}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Changed Type1",{{"moveoutDateUTC", type date}}),
+				    #"Inserted Start of Month" = Table.AddColumn(#"Changed Type2", "Move Out Month", each Date.StartOfMonth([moveoutDateUTC]), type date),
+				    #"Changed Type3" = Table.TransformColumnTypes(#"Inserted Start of Month",{{"actualPaybackMonths", type number}, {"actualRent", Currency.Type}, {"state", Int64.Type}, {"spendLiftRatio", type number}, {"currentRent", Currency.Type}, {"daysOnHold", type number}, {"daysBetweenMoveOutAndRentReady", type number}, {"expectedPaybackMonths", type number}, {"expectedRent", Currency.Type}, {"failsExpectedRent", Int64.Type}, {"lastUpdatedDate", type datetime}, {"marketRent", Currency.Type}, {"meetsExpectedRent", Int64.Type}, {"noticeDays", type number}, {"rentLift", Currency.Type}, {"timeToCompleteFromMoveoutDays", type number}, {"timeToCompleteDays", type number}, {"totalSpend", Currency.Type}, {"totalSpendWithTax", Currency.Type}, {"timeToCompleteAfterMoveoutBusinessDays", type number}, {"timeToCompleteAfterMoveoutDays", type number}, {"timeToCompleteBusinessDays", type number}, {"timeToCompleteFromMoveoutBusinessDays", type number}, {"totalChangeOrderSpend", Currency.Type}, {"totalChangeOrderSpendWithTax", Currency.Type}}),
+				    #"Merged Queries1" = Table.NestedJoin(#"Changed Type3", {"unitId"}, Properties_Merged, {"Properties_Units.units._id"}, "Properties_Merged", JoinKind.LeftOuter),
+				    #"Removed Columns" = Table.RemoveColumns(#"Merged Queries1",{"scope"}),
+				    #"Changed Type4" = Table.TransformColumnTypes(#"Removed Columns",{{"lastUpdatedDate", type date}, {"completedDateUTC", type date}, {"createdDateUTC", type date}}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Changed Type4",{"customFields", "milestones"}),
+				    #"Expanded Properties_Merged" = Table.ExpandTableColumn(#"Removed Columns1", "Properties_Merged", {"Properties_Units.units._id"}, {"Properties_Merged.Properties_Units.units._id"}),
+				    #"Split Column by Delimiter" = Table.SplitColumn(#"Expanded Properties_Merged", "moveinDateUTC", Splitter.SplitTextByDelimiter("T", QuoteStyle.Csv), {"moveinDateUTC.1", "moveinDateUTC.2"}),
+				    #"Changed Type5" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"moveinDateUTC.1", type date}, {"moveinDateUTC.2", type time}}),
+				    #"Removed Columns2" = Table.RemoveColumns(#"Changed Type5",{"moveinDateUTC.2"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns2",{{"moveinDateUTC.1", "moveinDateUTC"}}),
+				    #"Changed Type6" = Table.TransformColumnTypes(#"Renamed Columns",{{"moveinDateUTC", type date}}),
+				    #"Removed Columns3" = Table.RemoveColumns(#"Changed Type6",{"timeToCompleteDays", "timeToCompleteBusinessDays"})
+				in
+				    #"Removed Columns3"
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,64 @@
+table Properties_Units
+	lineageTag: 908535a3-2568-4e68-9ab5-88193fb55dc6
+
+	column _id
+		dataType: string
+		lineageTag: dc82975a-0d88-4a45-acb9-a4b16ccd7924
+		summarizeBy: none
+		sourceColumn: _id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: 1f86247c-06e8-405a-a33d-13fb09eff464
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column unitTypes
+		dataType: string
+		lineageTag: 13925b95-54ba-4aab-a009-74c9ca1a5554
+		summarizeBy: none
+		sourceColumn: unitTypes
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'units._id'
+		dataType: string
+		lineageTag: 487605d6-3b3e-4329-9186-c73fee57f800
+		summarizeBy: none
+		sourceColumn: units._id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'units.name'
+		dataType: string
+		lineageTag: ca278032-8f67-4207-9e5c-7a485e158b8c
+		summarizeBy: none
+		sourceColumn: units.name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'units.unitTypeId'
+		dataType: string
+		lineageTag: b6b8ee4f-c617-45fa-b446-20922df99bd1
+		summarizeBy: none
+		sourceColumn: units.unitTypeId
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Properties_Units = m
+		mode: import
+		source =
+				let
+				    columns = {"_id", "name", "unitTypes", "units"},
+				    Source = Properties_SourceQuery,
+				    #"Expanded units" = Table.ExpandListColumn(Source, "units"),
+				    #"Expanded units1" = Table.ExpandRecordColumn(#"Expanded units", "units", {"_id", "name", "unitTypeId"}, {"units._id", "units.name", "units.unitTypeId"})
+				in
+				    #"Expanded units1"
+
+	annotation PBI_ResultType = Exception
+

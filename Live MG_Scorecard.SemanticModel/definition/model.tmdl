@@ -1,0 +1,39 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-CA
+	maxParallelismPerRefresh: 1
+	dataAccessOptions
+		fastCombine
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["ExternalWorkOrderAnalytics","IndividualToPropertyAssignment","URL","AuthToken","PropertySummaries","Properties_SourceQuery","Properties_UnitTypes","Properties_Units","PropertyParent","Individuals","ExternalTurnoverAnalytics","Priority Sort","_Version","WorkflowTypes","Properties_Merged","_MSR","Table"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBIDesktopVersion = 2.131.901.0 (24.07)
+
+annotation PBI_ProTooling = ["DevMode","DaxQueryView_Desktop"]
+
+annotation TranslationsBuilder = Version:2.2-Updated:2024-02-25
+
+ref table IndividualToPropertyAssignment
+ref table ExternalWorkOrderAnalytics
+ref table PropertySummaries
+ref table PropertyParent
+ref table Individuals
+ref table ExternalTurnoverAnalytics
+ref table 'Priority Sort'
+ref table _Version
+ref table WorkflowTypes
+ref table Properties_UnitTypes
+ref table Properties_Units
+ref table Properties_Merged
+ref table Properties_SourceQuery
+ref table _MSR
+ref table Table
+
+ref cultureInfo en-US
+ref cultureInfo fr-FR
+

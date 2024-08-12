@@ -1,0 +1,33 @@
+DEFINE
+    MEASURE 'ExternalTurnoverAnalytics'[AverageDaysGoalNew] = 
+    VAR StandardGoal = 7
+    VAR RenovationGoal = 20
+
+    -- Calculate the number of standard and renovation turns
+    VAR StandardTurns = 
+        CALCULATE(
+            DISTINCTCOUNT('ExternalTurnoverAnalytics'[workflowId]), 
+            'ExternalTurnoverAnalytics'[TurnType] = "Standard", 
+            'ExternalTurnoverAnalytics'[state] = 3
+        )
+    VAR RenovationTurns = 
+        CALCULATE(
+            DISTINCTCOUNT('ExternalTurnoverAnalytics'[workflowId]), 
+            'ExternalTurnoverAnalytics'[TurnType] = "Renovation", 
+            'ExternalTurnoverAnalytics'[state] = 3
+        )
+
+    -- Calculate the total number of turns
+    VAR TotalTurns = StandardTurns + RenovationTurns
+
+    -- Calculate the total weighted days
+    VAR TotalWeightedDays = 
+        (StandardTurns * StandardGoal) + 
+        (RenovationTurns * RenovationGoal)
+
+    -- Return the average days goal
+    RETURN 
+    IF(TotalTurns > 0, TotalTurns / TotalWeightedDays, BLANK())
+
+EVALUATE
+ROW("AverageDaysGoalNew", 'ExternalTurnoverAnalytics'[AverageDaysGoalNew])

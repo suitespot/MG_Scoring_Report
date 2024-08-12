@@ -1,0 +1,180 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.0.0/schema.json",
+  "name": "ReportSection76f1d9f25df2a27da6a2",
+  "displayName": "WO Analytics_v4_Filter Pane",
+  "displayOption": "FitToWidth",
+  "height": 1200,
+  "width": 1620,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "Filterbfaedc385c7b37d4d5f6",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ExternalWorkOrderAnalytics"
+              }
+            },
+            "Property": "state"
+          }
+        },
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "e",
+              "Entity": "ExternalWorkOrderAnalytics",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Or": {
+                  "Left": {
+                    "Comparison": {
+                      "ComparisonKind": 0,
+                      "Left": {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "e"
+                            }
+                          },
+                          "Property": "state"
+                        }
+                      },
+                      "Right": {
+                        "Literal": {
+                          "Value": "'executed'"
+                        }
+                      }
+                    }
+                  },
+                  "Right": {
+                    "Comparison": {
+                      "ComparisonKind": 0,
+                      "Left": {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "e"
+                            }
+                          },
+                          "Property": "state"
+                        }
+                      },
+                      "Right": {
+                        "Literal": {
+                          "Value": "'closed'"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      }
+    ]
+  },
+  "visibility": "HiddenInViewMode",
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'SuiteSpot_Background.png'"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "ResourcePackageItem": {
+                    "PackageName": "RegisteredResources",
+                    "PackageType": 1,
+                    "ItemName": "SuiteSpot_Background8815890356167537.png"
+                  }
+                }
+              },
+              "scaling": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Fit'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "9273cd8f2b72a48772d9",
+      "target": "5bc3550806d842d3dfd7",
+      "type": "DataFilter"
+    },
+    {
+      "source": "5bc3550806d842d3dfd7",
+      "target": "9273cd8f2b72a48772d9",
+      "type": "DataFilter"
+    },
+    {
+      "source": "5bc3550806d842d3dfd7",
+      "target": "0ba9af3708fe93590ef2",
+      "type": "DataFilter"
+    },
+    {
+      "source": "9273cd8f2b72a48772d9",
+      "target": "0ba9af3708fe93590ef2",
+      "type": "DataFilter"
+    },
+    {
+      "source": "a2d9d0a8e757f6aeb24d",
+      "target": "0ba9af3708fe93590ef2",
+      "type": "DataFilter"
+    },
+    {
+      "source": "a2d9d0a8e757f6aeb24d",
+      "target": "9273cd8f2b72a48772d9",
+      "type": "DataFilter"
+    },
+    {
+      "source": "a2d9d0a8e757f6aeb24d",
+      "target": "5bc3550806d842d3dfd7",
+      "type": "DataFilter"
+    },
+    {
+      "source": "d7acfe7b042aa1c2ec44",
+      "target": "4ccc2a601bc05e88be2c",
+      "type": "NoFilter"
+    },
+    {
+      "source": "77a13d00ed64646f086f",
+      "target": "d7acfe7b042aa1c2ec44",
+      "type": "NoFilter"
+    },
+    {
+      "source": "77a13d00ed64646f086f",
+      "target": "4ccc2a601bc05e88be2c",
+      "type": "NoFilter"
+    }
+  ]
+}

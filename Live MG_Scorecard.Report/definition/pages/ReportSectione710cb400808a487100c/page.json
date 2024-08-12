@@ -1,0 +1,274 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.0.0/schema.json",
+  "name": "ReportSectione710cb400808a487100c",
+  "displayName": "WO Drill-Through",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "Filter5dcbf18f3b10a3f48b13",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ExternalWorkOrderAnalytics"
+              }
+            },
+            "Property": "PropertySummaries.name"
+          }
+        },
+        "howCreated": "Drillthrough"
+      },
+      {
+        "name": "Filter10eede4388636c3602b3",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ExternalWorkOrderAnalytics"
+              }
+            },
+            "Property": "workAssignedToFullName"
+          }
+        },
+        "howCreated": "Drillthrough"
+      },
+      {
+        "name": "Filter15f6a637b57742ddf3e8",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ExternalWorkOrderAnalytics"
+              }
+            },
+            "Property": "priority"
+          }
+        },
+        "howCreated": "Drillthrough"
+      },
+      {
+        "name": "Filtercea1450b894fe78dfc39",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ExternalWorkOrderAnalytics"
+              }
+            },
+            "Property": "category"
+          }
+        },
+        "howCreated": "Drillthrough"
+      },
+      {
+        "name": "Filterbad057a983d22942d380",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ExternalWorkOrderAnalytics"
+              }
+            },
+            "Property": "state"
+          }
+        },
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "e",
+              "Entity": "ExternalWorkOrderAnalytics",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Or": {
+                  "Left": {
+                    "Comparison": {
+                      "ComparisonKind": 0,
+                      "Left": {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "e"
+                            }
+                          },
+                          "Property": "state"
+                        }
+                      },
+                      "Right": {
+                        "Literal": {
+                          "Value": "'executed'"
+                        }
+                      }
+                    }
+                  },
+                  "Right": {
+                    "Comparison": {
+                      "ComparisonKind": 0,
+                      "Left": {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "e"
+                            }
+                          },
+                          "Property": "state"
+                        }
+                      },
+                      "Right": {
+                        "Literal": {
+                          "Value": "'closed'"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "Filterb350b4516893df7e2940",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "PropertySummaries"
+              }
+            },
+            "Property": "name"
+          }
+        },
+        "howCreated": "Drillthrough"
+      }
+    ]
+  },
+  "visibility": "HiddenInViewMode",
+  "pageBinding": {
+    "name": "Pod2",
+    "type": "Drillthrough",
+    "parameters": [
+      {
+        "name": "Param_Filter5dcbf18f3b10a3f48b13",
+        "boundFilter": "Filter5dcbf18f3b10a3f48b13",
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ExternalWorkOrderAnalytics"
+              }
+            },
+            "Property": "PropertySummaries.name"
+          }
+        }
+      },
+      {
+        "name": "Param_Filter10eede4388636c3602b3",
+        "boundFilter": "Filter10eede4388636c3602b3",
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ExternalWorkOrderAnalytics"
+              }
+            },
+            "Property": "workAssignedToFullName"
+          }
+        }
+      },
+      {
+        "name": "Param_Filter15f6a637b57742ddf3e8",
+        "boundFilter": "Filter15f6a637b57742ddf3e8",
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ExternalWorkOrderAnalytics"
+              }
+            },
+            "Property": "priority"
+          }
+        }
+      },
+      {
+        "name": "Param_Filtercea1450b894fe78dfc39",
+        "boundFilter": "Filtercea1450b894fe78dfc39",
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ExternalWorkOrderAnalytics"
+              }
+            },
+            "Property": "category"
+          }
+        }
+      },
+      {
+        "name": "Param_Filterb350b4516893df7e2940",
+        "boundFilter": "Filterb350b4516893df7e2940",
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "PropertySummaries"
+              }
+            },
+            "Property": "name"
+          }
+        }
+      }
+    ]
+  },
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'SuiteSpot_Background.png'"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "ResourcePackageItem": {
+                    "PackageName": "RegisteredResources",
+                    "PackageType": 1,
+                    "ItemName": "SuiteSpot_Background11207006549564125.png"
+                  }
+                }
+              },
+              "scaling": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Fit'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

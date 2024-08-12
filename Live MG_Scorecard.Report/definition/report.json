@@ -1,0 +1,136 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/1.0.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY23SU11",
+      "reportVersionAtImport": "5.49",
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "Custom04916374100702092.json",
+      "reportVersionAtImport": "5.51",
+      "type": "RegisteredResources"
+    }
+  },
+  "layoutOptimization": "PhonePortrait",
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "Filter44ef523800740699e355",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "IndividualToPropertyAssignment"
+              }
+            },
+            "Property": "individualId"
+          }
+        },
+        "howCreated": "User",
+        "isHiddenInViewMode": true
+      }
+    ]
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          },
+          "visible": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "resourcePackages": [
+    {
+      "id": 2811683,
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY23SU11",
+          "path": "BaseThemes/CY23SU11.json",
+          "type": "BaseTheme",
+          "id": 7562536
+        }
+      ]
+    },
+    {
+      "id": 2982065,
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "SuiteSpot_Background8815890356167537.png",
+          "path": "SuiteSpot_Background8815890356167537.png",
+          "type": "Image",
+          "id": 8172297
+        },
+        {
+          "name": "SuiteSpot_Background11207006549564125.png",
+          "path": "SuiteSpot_Background11207006549564125.png",
+          "type": "Image",
+          "id": 8172296
+        },
+        {
+          "name": "Excel_Logo_28682098868253352.png",
+          "path": "Excel_Logo_28682098868253352.png",
+          "type": "Image",
+          "id": 8172295
+        },
+        {
+          "name": "Custom04916374100702092.json",
+          "path": "Custom04916374100702092.json",
+          "type": "Image",
+          "id": 8172294
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true
+  },
+  "slowDataSourceSettings": {
+    "isCrossHighlightingDisabled": false,
+    "isSlicerSelectionsButtonEnabled": false,
+    "isFilterSelectionsButtonEnabled": false,
+    "isFieldWellButtonEnabled": false,
+    "isApplyAllButtonEnabled": false
+  },
+  "publicCustomVisuals": [
+    "packedBubble563FBEFA65CC43A48496B6BB533D9890",
+    "TableHeatMap1443716069308",
+    "Timeline1447991079100",
+    "TornadoChart1452517688218"
+  ]
+}

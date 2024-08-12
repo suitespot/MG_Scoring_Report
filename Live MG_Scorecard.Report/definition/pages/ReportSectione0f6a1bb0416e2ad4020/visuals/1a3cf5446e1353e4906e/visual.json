@@ -1,0 +1,430 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "1a3cf5446e1353e4906e",
+  "position": {
+    "x": 39.16083916083916,
+    "y": 31.328671328671327,
+    "z": 0,
+    "width": 1201.6783216783217,
+    "height": 652.30769230769226,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ExternalTurnoverAnalytics"
+                    }
+                  },
+                  "Property": "jobNumber"
+                }
+              },
+              "queryRef": "ExternalTurnoverAnalytics.jobNumber",
+              "nativeQueryRef": "Job Number",
+              "displayName": "Job Number"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ExternalTurnoverAnalytics"
+                    }
+                  },
+                  "Property": "PropertySummaries.name"
+                }
+              },
+              "queryRef": "ExternalTurnoverAnalytics.PropertySummaries.name",
+              "nativeQueryRef": "Property Name",
+              "displayName": "Property Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ExternalTurnoverAnalytics"
+                    }
+                  },
+                  "Property": "moveoutDateUTC"
+                }
+              },
+              "queryRef": "ExternalTurnoverAnalytics.moveoutDateUTC",
+              "nativeQueryRef": "Move Out Date",
+              "displayName": "Move Out Date"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "ExternalTurnoverAnalytics"
+                        }
+                      },
+                      "Property": "rentLift"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(ExternalTurnoverAnalytics.rentLift)",
+              "nativeQueryRef": "Rent Lift",
+              "displayName": "Rent Lift"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "ExternalTurnoverAnalytics"
+                        }
+                      },
+                      "Property": "totalSpend"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(ExternalTurnoverAnalytics.totalSpend)",
+              "nativeQueryRef": "Total Spend",
+              "displayName": "Total Spend"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ExternalTurnoverAnalytics"
+                    }
+                  },
+                  "Property": "totalChangeOrderSpend"
+                }
+              },
+              "queryRef": "ExternalTurnoverAnalytics.totalChangeOrderSpend",
+              "nativeQueryRef": "Total Change Order Spend",
+              "displayName": "Total Change Order Spend"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "ExternalTurnoverAnalytics"
+                        }
+                      },
+                      "Property": "actualRent"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(ExternalTurnoverAnalytics.actualRent)",
+              "nativeQueryRef": "Actual Rent",
+              "displayName": "Actual Rent"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ExternalTurnoverAnalytics"
+                    }
+                  },
+                  "Property": "timeToCompleteAfterMoveoutBusinessDays"
+                }
+              },
+              "queryRef": "ExternalTurnoverAnalytics.timeToCompleteAfterMoveoutBusinessDays",
+              "nativeQueryRef": "timeToCompleteAfterMoveoutBusinessDays",
+              "displayName": "Time to Complete After Move Out Business Days"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ExternalTurnoverAnalytics"
+                  }
+                },
+                "Property": "jobNumber"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 2,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "outlineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "3D"
+                }
+              }
+            },
+            "gridHorizontalColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": -0.1
+                    }
+                  }
+                }
+              }
+            },
+            "outlineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 2,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "webURL": {
+              "expr": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "ExternalTurnoverAnalytics"
+                        }
+                      },
+                      "Property": "Job Link"
+                    }
+                  },
+                  "Function": 3
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ],
+            "metadata": "ExternalTurnoverAnalytics.jobNumber"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'TO Job Number Details'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "14D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#102C45'"
+                    }
+                  }
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "stylePreset": [
+        {
+          "properties": {
+            "name": {
+              "expr": {
+                "Literal": {
+                  "Value": "'None'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "divider": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Return to Work Order Analytics to continue review'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "spacing": [
+        {
+          "properties": {
+            "customizeSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

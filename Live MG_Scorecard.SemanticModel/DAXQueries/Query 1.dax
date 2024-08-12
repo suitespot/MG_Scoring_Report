@@ -1,0 +1,18 @@
+EVALUATE
+VAR StandardGoal = 7
+VAR RenovationGoal = 20
+VAR TotalTurns = CALCULATE(DISTINCTCOUNT('ExternalTurnoverAnalytics'[workflowId]), 'ExternalTurnoverAnalytics'[state] = 3)
+VAR TotalWeightedDays = 
+    SUMX(
+        'ExternalTurnoverAnalytics',
+        SWITCH(
+            'ExternalTurnoverAnalytics'[TurnType],
+            "Standard", StandardGoal,
+            "Renovation", RenovationGoal,
+            0
+        )
+        )
+// RETURN 
+//     ROW(
+//         "AverageDaysGoal", DIVIDE(TotalWeightedDays, TotalTurns, 0)
+//     )

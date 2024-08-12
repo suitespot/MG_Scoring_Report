@@ -1,0 +1,42 @@
+table WorkflowTypes
+	lineageTag: 813d91ed-488c-4780-88bd-2cef52ab40d4
+
+	column key
+		dataType: string
+		lineageTag: 439aa5c9-8638-41e1-a435-b8b1d4e2e596
+		summarizeBy: none
+		sourceColumn: key
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: be115e80-6914-40eb-957a-4ab3ba6b437a
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column icon
+		dataType: string
+		lineageTag: 805ef2cd-f428-4a49-88e4-7e886a190fcf
+		summarizeBy: none
+		sourceColumn: icon
+
+		annotation SummarizationSetBy = Automatic
+
+	partition WorkflowTypes = m
+		mode: import
+		source =
+				let
+				    columns = {"key", "name", "icon" },
+				    Source = Json.Document(Web.Contents(URL, [
+				        RelativePath = "/api/analytics/reference/workflow-types",
+				        Headers = [Authorization = "Bearer " & AuthToken]])),
+				    ToTable = Table.FromRecords(Source, columns, MissingField.UseNull),
+				    Result = ToTable
+				in
+				    Result
+
+	annotation PBI_ResultType = Table
+

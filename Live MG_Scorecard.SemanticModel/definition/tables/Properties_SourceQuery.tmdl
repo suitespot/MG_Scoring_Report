@@ -1,0 +1,49 @@
+table Properties_SourceQuery
+	lineageTag: 183b95c2-b4b3-4fbc-b8ab-a57f336ecf20
+
+	column _id
+		dataType: string
+		lineageTag: 31f7856c-d8d0-4693-a4d6-0b9d46b803e4
+		summarizeBy: none
+		sourceColumn: _id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: 9394c411-0ffc-41bf-b078-0c0c6c905932
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column unitTypes
+		dataType: string
+		lineageTag: 9efb55bf-a023-43ab-a5c6-5f3a96ed40a5
+		summarizeBy: none
+		sourceColumn: unitTypes
+
+		annotation SummarizationSetBy = Automatic
+
+	column units
+		dataType: string
+		lineageTag: 0daa1852-a7d2-43a9-8c02-9fd3d444ab48
+		summarizeBy: none
+		sourceColumn: units
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Properties_SourceQuery = m
+		mode: import
+		source =
+				let
+				    columns = {"_id", "name", "unitTypes", "units"},
+				    Source = Json.Document(Web.Contents(URL, [
+				        RelativePath = "/api/external/properties",
+				        Headers = [Authorization = "Bearer " & AuthToken]])),
+				    ToTable = Table.FromRecords(Source, columns, MissingField.UseNull)
+				in
+				    ToTable
+
+	annotation PBI_ResultType = Exception
+

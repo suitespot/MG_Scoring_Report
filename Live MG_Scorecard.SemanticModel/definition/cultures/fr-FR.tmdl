@@ -1,0 +1,21 @@
+cultureInfo fr-FR
+	translations
+		model Model
+			table ExternalWorkOrderAnalytics
+				column category
+					caption: Catégorie
+				column priority
+					caption: Priorité
+				column timeToCompleteBusinessDays
+					caption: Jours pour terminer
+				column timeToFirstAssignedBusinessDays
+					caption: Jours à attribuer
+				measure Resolved
+					caption: Résolu
+				measure 'Hours Logged'
+					caption: Heures Enregistrées
+				measure Overdue
+					caption: En Retard
+				measure Callbacks
+					caption: Rappels
+

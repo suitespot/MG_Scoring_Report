@@ -1,0 +1,78 @@
+table Properties_Merged
+	lineageTag: 5dee1e77-25d6-4d55-bc7a-46ff6c7b5910
+
+	column _id
+		dataType: string
+		lineageTag: a01bb66f-75f7-45b3-bfbf-4c5505e85447
+		summarizeBy: none
+		sourceColumn: _id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: c3518c76-dfba-477b-8ac0-c6581ea988e0
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'unitTypes._id'
+		dataType: string
+		lineageTag: d0a30c04-b8a2-4ec5-a054-50746cae07e4
+		summarizeBy: none
+		sourceColumn: unitTypes._id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'unitTypes.name'
+		dataType: string
+		lineageTag: 3daf0ef9-a6b5-4c13-a31a-6b5923ec9d61
+		summarizeBy: none
+		sourceColumn: unitTypes.name
+
+		annotation SummarizationSetBy = Automatic
+
+	column units
+		dataType: string
+		lineageTag: 19dc25e4-2562-4037-b32b-5760dcfffde4
+		summarizeBy: none
+		sourceColumn: units
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Properties_Units.units._id'
+		dataType: string
+		lineageTag: 0ff58434-e521-4b7e-a8cb-1221c837a983
+		summarizeBy: none
+		sourceColumn: Properties_Units.units._id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Properties_Units.units.name'
+		dataType: string
+		lineageTag: 69e23204-e7ff-473a-8efc-5215bb96d067
+		summarizeBy: none
+		sourceColumn: Properties_Units.units.name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Properties_Units.units.unitTypeId'
+		dataType: string
+		lineageTag: 3db32896-af72-44bf-b36a-3df9b92fdc87
+		summarizeBy: none
+		sourceColumn: Properties_Units.units.unitTypeId
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Properties_Merged = m
+		mode: import
+		source =
+				let
+				    Source = Table.NestedJoin(Properties_UnitTypes, {"unitTypes._id"}, Properties_Units, {"units.unitTypeId"}, "Properties_Units", JoinKind.RightOuter),
+				    #"Expanded Properties_Units" = Table.ExpandTableColumn(Source, "Properties_Units", {"units._id", "units.name", "units.unitTypeId"}, {"Properties_Units.units._id", "Properties_Units.units.name", "Properties_Units.units.unitTypeId"})
+				in
+				    #"Expanded Properties_Units"
+
+	annotation PBI_ResultType = Exception
+

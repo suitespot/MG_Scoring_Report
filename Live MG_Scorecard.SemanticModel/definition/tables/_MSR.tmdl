@@ -1,0 +1,281 @@
+table _MSR
+	lineageTag: afc1d85d-89a3-4710-bd03-cb9bc99a9f86
+
+	measure '# of UnitsMadeReady' = ```
+			
+			CALCULATE(
+			    DISTINCTCOUNT(ExternalWorkOrderAnalytics[jobNumber]),
+			    FORMAT(ExternalWorkOrderAnalytics[state], "Text") 
+			    IN { "Executed"}
+			)
+			```
+		formatString: 0
+		lineageTag: 9efdf519-580b-44b9-a7f8-d2f05d2974ad
+
+	measure TotalDaysStandardTurns = ```
+			
+			// SUMX(
+			//     FILTER(
+			//         ExternalTurnoverAnalytics,
+			//         ExternalTurnoverAnalytics[turnType]="Standard Turn"
+			//     ),
+			//     ExternalTurnoverAnalytics[Turn Count] * 7
+			// )
+			CALCULATE(DISTINCTCOUNT(ExternalTurnoverAnalytics[jobNumber]), ExternalTurnoverAnalytics[turnType]="Standard Turn",
+			ExternalTurnoverAnalytics[state]=3
+			)*7
+			
+			```
+		formatString: 0
+		lineageTag: a087cbbc-4a1f-4eb8-9914-0bc2291f6826
+
+	measure TotalDaysRennovations = ```
+			
+			// SUMX(
+			//     FILTER(
+			//         ExternalTurnoverAnalytics,
+			//         ExternalTurnoverAnalytics[turnType]="Renovation"        
+			        
+			//     ),
+			//     ExternalTurnoverAnalytics[Turn Count] * 20
+			// )
+			
+			CALCULATE(DISTINCTCOUNT(ExternalTurnoverAnalytics[jobNumber]),ExternalTurnoverAnalytics[turnType]="Renovations",
+			ExternalTurnoverAnalytics[state]=3)*20
+			```
+		formatString: 0
+		lineageTag: a118baf9-d59c-418e-9d39-42f67d06298a
+
+	measure 'Turn Counts' = COUNT(ExternalTurnoverAnalytics[_id])
+		formatString: 0
+		lineageTag: f4f730a8-9eb7-427b-be9c-acd703dd0c44
+
+	measure StandardTurnCount = ```
+			
+			// VAR turncount =
+			 CALCULATE(
+			    COUNT(ExternalTurnoverAnalytics[jobNumber]),
+			    ExternalTurnoverAnalytics[turnType] = "Standard Turn",ExternalTurnoverAnalytics[state]=3
+			)
+			// RETURN 
+			// IF(ISBLANK(turncount), 0, turncount)
+			```
+		formatString: 0
+		lineageTag: ea47d994-5e8e-49fa-bba5-fea095630fae
+
+	measure '# of Renovations' = ```
+			
+			// VAR turncount = 
+			CALCULATE(
+			    COUNT(ExternalTurnoverAnalytics[jobNumber]),
+			    ExternalTurnoverAnalytics[turnType] = "Renovation",ExternalTurnoverAnalytics[state]=3
+			)
+			// RETURN 
+			// IF(ISBLANK(turncount), 0, turncount)
+			```
+		formatString: 0
+		lineageTag: 114ffc87-0b06-42e3-b691-b1ea85d3915d
+
+	measure 'Avg # of Days Service Request Completion' =
+			
+			DIVIDE(
+			    [TotalDaysStandardTurns] + [TotalDaysRennovations],
+			    [Turn Counts],
+			    0
+			)
+		lineageTag: b4cf0cf5-9215-48ff-bf58-8900ee482814
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# of Current Pending Vacant Make Readies' =
+			
+			CALCULATE(
+			    COUNT(ExternalTurnoverAnalytics[jobNumber]),
+			    ExternalTurnoverAnalytics[moveoutDateUTC] > 0,
+			    ExternalTurnoverAnalytics[moveinDateUTC] = 0
+			)
+		formatString: 0
+		lineageTag: f7a4981d-16c2-4c73-a1a1-ca2359a0fb72
+
+	measure '# of Current Pending Notice Make Readies' =
+			
+			CALCULATE(
+			    COUNT(ExternalTurnoverAnalytics[jobNumber]),
+			    NOT(ISBLANK(ExternalTurnoverAnalytics[noticeDays])),
+			    ISBLANK(ExternalTurnoverAnalytics[moveoutDateUTC]) || ExternalTurnoverAnalytics[moveoutDateUTC] > TODAY(),
+			    ISBLANK(ExternalTurnoverAnalytics[moveinDateUTC])
+			)
+		formatString: 0
+		lineageTag: ac370a03-ba8a-4637-9773-6fd7ae31dfbe
+
+	measure '# of Service Requests Completed' =
+			CALCULATE(
+			    DISTINCTCOUNTNOBLANK(ExternalTurnoverAnalytics[jobNumber]),
+			    ExternalTurnoverAnalytics[state]=3
+			    )
+		formatString: 0
+		lineageTag: 5c47dae3-bf31-4157-a6b7-47a86e0af9fc
+
+	measure '# of Current Open Service Requests' =
+			CALCULATE(
+			    DISTINCTCOUNTNOBLANK(ExternalTurnoverAnalytics[jobNumber]),
+			    ExternalTurnoverAnalytics[state]=2
+			    )
+		formatString: 0
+		lineageTag: 611acb57-ae78-425e-b9c9-af716ba03cf4
+
+	measure TotalDaysCount = [StandardTurnCount]*7+[TotalDaysRennovations]*20
+		formatString: 0
+		lineageTag: bc0761a6-5e50-4b8f-a011-b986934209c2
+
+	measure AverageDaysGoalNew = ```
+			
+			VAR StandardGoal = 7
+			VAR RenovationGoal = 20
+			
+			-- Calculate the number of standard and renovation turns
+			VAR StandardTurns = CALCULATE(DISTINCTCOUNT('ExternalTurnoverAnalytics'[workflowId]), 'ExternalTurnoverAnalytics'[TurnType] = "Standard", 'ExternalTurnoverAnalytics'[state] = 3)
+			VAR RenovationTurns = CALCULATE(DISTINCTCOUNT('ExternalTurnoverAnalytics'[workflowId]), 'ExternalTurnoverAnalytics'[TurnType] = "Renovation", 'ExternalTurnoverAnalytics'[state] = 3)
+			
+			-- Calculate the total number of turns
+			VAR TotalTurns = StandardTurns + RenovationTurns
+			
+			-- Calculate the total weighted days
+			VAR TotalWeightedDays = 
+			    (StandardTurns * StandardGoal) + 
+			    (RenovationTurns * RenovationGoal)
+			
+			-- Return the average days goal
+			RETURN 
+			    DIVIDE(
+			        TotalWeightedDays,
+			        TotalTurns,
+			        0
+			    )
+			```
+		lineageTag: 3687cabf-b760-4c1c-bc69-be688e2c0478
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total weighted days' = 7*[StandardTurnCount]+20*[# of Renovations]
+		formatString: 0
+		lineageTag: e849f27c-bd31-4573-ad6b-0ffdaa1d1486
+
+	measure AVG_Days_Goals =
+			
+			// IF(
+			//     ISBLANK([Total weighted days]) || ISBLANK([TotalTurns]) || [TotalTurns] = 0,
+			//     0,  -- Replace NaN with 0
+			//     [Total weighted days] / [TotalTurns]
+			// )
+			
+			([TotalDaysRennovations]+[TotalDaysStandardTurns])/[TotalTurns]
+		lineageTag: e9538a84-2008-47dc-9bee-be09e17e269d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '_Actual Avg Days for Renovations' = AVERAGE(ExternalTurnoverAnalytics[Actual Avg Days for Renovations])
+		lineageTag: f3585663-e37f-4b82-9253-fa16b3b495e3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '_Actual Avg Days for Standard Turns' = AVERAGE(ExternalTurnoverAnalytics[Actual Avg Days for Standard Turns])
+		lineageTag: cdedd489-dbe5-4331-94de-8304980a9586
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Over/Under Make Ready Goal_' = [Actual Avg Turnover Days]-[AVG_Days_Goals]
+		lineageTag: 0100b748-300a-4741-ba04-e3af850d9416
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure StandardTurnsWithinExpectedDays =
+			
+			CALCULATE(
+			    DISTINCTCOUNT('ExternalTurnoverAnalytics'[jobNumber]),
+			    'ExternalTurnoverAnalytics'[TurnType] = "Standard Turn",
+			    ExternalTurnoverAnalytics[state]=3,
+			    'ExternalTurnoverAnalytics'[timeToCompleteAfterMoveoutBusinessDays] <= 7)
+		formatString: 0
+		lineageTag: f0beb4e4-3a71-4b6a-97f1-4b961dccf5d9
+
+	measure RenovationsWithinExpectedDays =
+			
+			CALCULATE(
+			    COUNTROWS('ExternalTurnoverAnalytics'),
+			    'ExternalTurnoverAnalytics'[TurnType] = "Renovation",
+			     ExternalTurnoverAnalytics[state]=3,
+			    'ExternalTurnoverAnalytics'[timeToCompleteAfterMoveoutBusinessDays] <= 20
+			)
+		formatString: 0
+		lineageTag: 14b9f563-77f7-4de8-88a7-0bac706e7de8
+
+	measure 'XXX Average Make Ready %' = ```
+			
+			// It will not work properly unless turns marked correctly
+			VAR TotalWithinExpectedDays = 
+			    [StandardTurnsWithinExpectedDays] + [RenovationsWithinExpectedDays]
+			
+			
+			
+			RETURN 
+			    DIVIDE(
+			        TotalWithinExpectedDays,
+			        [TotalTurns],
+			        0
+			    ) 
+			    // * 100
+			```
+		formatString: 0%;-0%;0%
+		lineageTag: 448684f7-b310-4d17-a4eb-efafd7b7e980
+
+	measure '% Of TurnsCompletedontime' = ([StandardTurnsWithinExpectedDays]-[StandardTurnCount])/[StandardTurnCount]*-1
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: d471089d-035c-4b0a-bdb7-5f62f9c981ef
+
+	measure StandardTurnsNotWithinExpectedDays =
+			
+			CALCULATE(
+			    DISTINCTCOUNT('ExternalTurnoverAnalytics'[jobNumber]),
+			    'ExternalTurnoverAnalytics'[TurnType] = "Standard Turn",
+			    ExternalTurnoverAnalytics[state]=3,
+			    'ExternalTurnoverAnalytics'[timeToCompleteAfterMoveoutBusinessDays] > 7)
+		formatString: 0
+		lineageTag: 4e79cf3c-b544-4d87-adee-1639741bb34e
+
+	measure '% Of TurnsCompletedontimeTotalTurns' = ([StandardTurnsWithinExpectedDays]-[TotalTurns])/[TotalTurns]*-1
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: b7532509-a675-44be-8084-99b4093dd48f
+
+	measure '% Of RenoTurnsCompletedontime' = ([RenovationsWithinExpectedDays]-[# of Renovations])/[# of Renovations]*-1
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: c34c83ec-2b8b-44c3-8de0-bebfe8e32a0e
+
+	measure '% Avg CompletionRateTurns' = [% Of TurnsCompletedontime]+ [% Of RenoTurnsCompletedontime]
+		lineageTag: e9427392-4233-437c-9c95-f3214615e8b4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Make Ready %' = ([StandardTurnsWithinExpectedDays]+[RenovationsWithinExpectedDays])/([StandardTurnCount]+[# of Renovations])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 949fccad-ebb2-4691-a981-7b03d13afa76
+
+	column Column1
+		dataType: string
+		lineageTag: 3ee74f0c-caa2-48f5-96ea-f569bc2b30fb
+		summarizeBy: none
+		sourceColumn: Column1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _MSR = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

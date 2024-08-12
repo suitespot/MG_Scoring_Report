@@ -1,0 +1,213 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "83cf8ed0956c471422bb",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "width": 1280,
+    "height": 719.704069050555,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "PropertySummaries"
+                    }
+                  },
+                  "Property": "name"
+                }
+              },
+              "queryRef": "PropertySummaries.name",
+              "nativeQueryRef": "name"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_MSR"
+                    }
+                  },
+                  "Property": "StandardTurnsWithinExpectedDays"
+                }
+              },
+              "queryRef": "_MSR.StandardTurnsWithinExpectedDays",
+              "nativeQueryRef": "StandardTurnsWithinExpectedDays"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_MSR"
+                    }
+                  },
+                  "Property": "StandardTurnsNotWithinExpectedDays"
+                }
+              },
+              "queryRef": "_MSR.StandardTurnsNotWithinExpectedDays",
+              "nativeQueryRef": "StandardTurnsNotWithinExpectedDays"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_MSR"
+                    }
+                  },
+                  "Property": "StandardTurnCount"
+                }
+              },
+              "queryRef": "_MSR.StandardTurnCount",
+              "nativeQueryRef": "StandardTurnCount"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_MSR"
+                    }
+                  },
+                  "Property": "% Of TurnsCompletedontime"
+                }
+              },
+              "queryRef": "_MSR.% Of TurnsCompletedontime",
+              "nativeQueryRef": "% Of TurnsCompletedontime"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_MSR"
+                    }
+                  },
+                  "Property": "% Of TurnsCompletedontimeTotalTurns"
+                }
+              },
+              "queryRef": "_MSR.% Of TurnsCompletedontimeTotalTurns",
+              "nativeQueryRef": "% Of TurnsCompletedontimeTotalTurns"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_MSR"
+                    }
+                  },
+                  "Property": "RenovationsWithinExpectedDays"
+                }
+              },
+              "queryRef": "_MSR.RenovationsWithinExpectedDays",
+              "nativeQueryRef": "RenovationsWithinExpectedDays"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_MSR"
+                    }
+                  },
+                  "Property": "# of Renovations"
+                }
+              },
+              "queryRef": "_MSR.# of Renovations",
+              "nativeQueryRef": "# of Renovations"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_MSR"
+                    }
+                  },
+                  "Property": "% Of RenoTurnsCompletedontime"
+                }
+              },
+              "queryRef": "_MSR.% Of RenoTurnsCompletedontime",
+              "nativeQueryRef": "% Of RenoTurnsCompletedontime"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_MSR"
+                    }
+                  },
+                  "Property": "Average Make Ready %"
+                }
+              },
+              "queryRef": "_MSR.XXX Calc",
+              "nativeQueryRef": "XXX Calc"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_MSR"
+                  }
+                },
+                "Property": "% Of TurnsCompletedontimeTotalTurns"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "153.0369949350544D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_MSR.% Of TurnsCompletedontimeTotalTurns"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "118.86805242297399D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_MSR.% Of TurnsCompletedontime"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

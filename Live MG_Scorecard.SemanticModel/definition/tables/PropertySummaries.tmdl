@@ -1,0 +1,54 @@
+table PropertySummaries
+	lineageTag: 17452c7f-7b68-4a97-b2f6-6ca727f2e796
+
+	column _id
+		dataType: string
+		lineageTag: 23d5e26c-c402-4668-b691-b92f2ad0a332
+		summarizeBy: none
+		sourceColumn: _id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: 329fcb0c-6103-404b-98aa-ae26ae88dd6d
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column parentId
+		dataType: string
+		lineageTag: 4442dc79-9c7c-4b8a-9767-8aa7438d0a6e
+		summarizeBy: none
+		sourceColumn: parentId
+
+		annotation SummarizationSetBy = Automatic
+
+	column unitCount
+		dataType: int64
+		formatString: 0
+		lineageTag: e4c9ca1a-b15a-4ee2-b50f-0ab510b43cec
+		summarizeBy: none
+		sourceColumn: unitCount
+
+		annotation SummarizationSetBy = User
+
+	partition PropertySummaries = m
+		mode: import
+		source =
+				let
+				    columns = {"_id", "name", "parentId", "unitCount"},
+				    Source = Json.Document(Web.Contents(URL, [
+				        RelativePath = "/api/external/properties/summaries",
+				        Headers = [Authorization = "Bearer " & AuthToken]])),
+				    ToTable = Table.FromRecords(Source, columns, MissingField.UseNull),
+				    Result = ToTable,
+				    #"Changed Type" = Table.TransformColumnTypes(Result,{{"unitCount", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Exception
+

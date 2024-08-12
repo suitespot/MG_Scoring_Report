@@ -1,0 +1,31 @@
+table 'Priority Sort'
+	lineageTag: ca181003-8c5c-4b5b-828f-1ee7d06075b6
+
+	column Priority
+		dataType: string
+		lineageTag: a920fd0e-9959-4d5f-a4d8-629c63e35be6
+		summarizeBy: none
+		sourceColumn: Priority
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sort Value'
+		dataType: int64
+		formatString: 0
+		lineageTag: d9eb7db3-f3a7-46c4-8457-f17b6c441123
+		summarizeBy: none
+		sourceColumn: Sort Value
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Priority Sort' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45W8shMz1DSUTJUitWJVvLJLweyjcFsv/y8VCDHDMzxTU0Bso0gEo5wYSMTBY/80qJioIAJWMA1N7UoPTUvuRIoYgrTmVmaC9EcCwA=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Priority = _t, #"Sort Value" = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Priority", type text}, {"Sort Value", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

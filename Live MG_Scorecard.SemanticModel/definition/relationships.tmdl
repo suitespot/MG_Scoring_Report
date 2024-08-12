@@ -1,0 +1,59 @@
+relationship 9cfe896a-53ad-4ec4-baba-4b0a91d61fc9
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: PropertyParent._id
+	toColumn: PropertySummaries._id
+
+relationship 1c76b05d-21f1-4c5b-bd90-3bb9642dca19
+	fromColumn: ExternalWorkOrderAnalytics.completedById
+	toColumn: Individuals._id
+
+relationship b61a9c07-3a6f-43d2-855a-c67fc1510c1f
+	fromColumn: ExternalWorkOrderAnalytics.priority
+	toColumn: 'Priority Sort'.Priority
+
+relationship 085600cc-c5fe-e91f-6dae-d737ae02a3d0
+	fromColumn: ExternalWorkOrderAnalytics.propertyId
+	toColumn: PropertySummaries._id
+
+relationship f6030d71-cf0c-449f-9c90-3caf8722a5d2
+	fromColumn: ExternalTurnoverAnalytics.propertyId
+	toColumn: PropertySummaries._id
+
+relationship b91e54f1-8cc6-4ae9-bab2-1cfa32c6d6cd
+	crossFilteringBehavior: bothDirections
+	fromColumn: IndividualToPropertyAssignment.propertyId
+	toColumn: PropertySummaries._id
+
+relationship 9a14c5d1-7b5e-42a7-a96b-b48a9e6afacf
+	crossFilteringBehavior: bothDirections
+	fromColumn: ExternalWorkOrderAnalytics.workflowType
+	toColumn: WorkflowTypes.key
+
+relationship 9c1d4188-2b6b-409c-9809-04714207a502
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: ExternalWorkOrderAnalytics.unitId
+	toColumn: Properties_Merged.'Properties_Units.units._id'
+
+relationship 9f9962ec-a742-05ae-e97e-8bc1a86fb4d5
+	isActive: false
+	fromColumn: ExternalTurnoverAnalytics.unitId
+	toColumn: Properties_Units.'units._id'
+
+relationship e1499d18-bd8c-8437-5e62-adce86435bff
+	crossFilteringBehavior: bothDirections
+	fromColumn: Properties_Units._id
+	toColumn: PropertySummaries._id
+
+relationship b273b071-12b3-bb94-e507-d320d695f68b
+	isActive: false
+	fromColumn: ExternalWorkOrderAnalytics.unitId
+	toColumn: Properties_Units.'units._id'
+
+relationship 49cdd26c-726f-8aa0-1514-f738c6f4a26f
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromColumn: ExternalWorkOrderAnalytics.workflowId
+	toColumn: ExternalTurnoverAnalytics.workflowId
+

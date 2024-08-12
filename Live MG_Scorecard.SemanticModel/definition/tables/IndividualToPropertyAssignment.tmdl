@@ -1,0 +1,35 @@
+table IndividualToPropertyAssignment
+	lineageTag: 099ba5d1-fc3f-4017-ad88-832832277c28
+
+	column individualId
+		dataType: string
+		lineageTag: 35c7039a-8829-4fc7-a69c-b17cfdab47b5
+		summarizeBy: none
+		sourceColumn: individualId
+
+		annotation SummarizationSetBy = Automatic
+
+	column propertyId
+		dataType: string
+		lineageTag: 502cb9c9-5deb-415a-8c63-2ebd83d3b03c
+		summarizeBy: none
+		sourceColumn: propertyId
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition IndividualToPropertyAssignment = m
+		mode: import
+		source =
+				let
+				    columns = {"individualId", "propertyId"},
+				    Source = Json.Document(Web.Contents(URL, [
+				        RelativePath = "/api/analytics/security/individual-property-relation",
+				        Headers = [Authorization = "Bearer " & AuthToken]])),
+				    ToTable = Table.FromRecords(Source, columns, MissingField.UseNull)
+				in
+				    ToTable
+
+	annotation PBI_ResultType = Table
+

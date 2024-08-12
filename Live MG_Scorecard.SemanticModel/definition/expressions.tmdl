@@ -1,0 +1,10 @@
+expression AuthToken = "tk.eyJ1IjoiNjVmYjc4OGMyZjUxMjQwMDIwYjMwY2FiIiwiYyI6IjY0ZTYzNTVjNjk1NjhkMjllYzA0NzE5OSIsInZlciI6MywiaWF0IjoxNzIzNDc2NzI2LCJleHAiOjE3MjM1MTk5MjYsImF1ZCI6ImFwaV90b2tlbiIsImlzcyI6InVybjpzdWl0ZXNwb3Q6YXV0aCIsImp0aSI6IjAxaHNmNHhzY3J5emQ2emRkd25lZzgza21wQHRva2Vucy5zdWl0ZXNwb3QuaW8ifQ.sfiw4MTZclZSd9sCDtfXcrXRAti66tq5dMQCQH3ii3eBQTnUzV6uKyQfjtLD0g4n" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 95efe29c-969f-4eca-a817-0663818a094b
+
+	annotation PBI_ResultType = Text
+
+expression URL = "https://api.suitespot.io" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: f96fbf71-37da-45bb-8bca-c55923143884
+
+	annotation PBI_ResultType = Text
+
